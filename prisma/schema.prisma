@@ -1,0 +1,110 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+enum ProductStatus {
+  DRAFT
+  AVAILABLE
+  RESERVED
+  SOLD
+}
+
+enum Locale {
+  FR
+  AR
+}
+
+enum ProductPurpose {
+  MILK
+  MEAT
+  GENERAL
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  role      UserRole @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProductCategory {
+  id           String                       @id @default(cuid())
+  slug         String                       @unique
+  imageUrl     String?
+  sortOrder    Int                          @default(0)
+  products     Product[]
+  translations ProductCategoryTranslation[]
+  createdAt    DateTime                     @default(now())
+  updatedAt    DateTime                     @updatedAt
+}
+
+model ProductCategoryTranslation {
+  id          String          @id @default(cuid())
+  categoryId  String
+  category    ProductCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  locale      Locale
+  name        String
+  description String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@unique([categoryId, locale])
+  @@index([locale])
+}
+
+model Product {
+  id           String             @id @default(cuid())
+  slug         String             @unique
+  tagNumber    String?
+  categoryId   String
+  category     ProductCategory    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  purpose      ProductPurpose     @default(GENERAL)
+  breed        String?
+  sex          String?
+  birthDate    DateTime?
+  price        String?
+  weight       String?
+  imageUrl     String?
+  status       ProductStatus      @default(AVAILABLE)
+  translations ProductTranslation[]
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  @@index([categoryId])
+  @@index([status])
+  @@index([purpose])
+}
+
+model ProductTranslation {
+  id                   String   @id @default(cuid())
+  productId            String
+  product              Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  locale               Locale
+  name                 String
+  description          String?
+  overview             String?
+  healthAndVaccination String?
+  milkProduction       String?
+  meatDetails          String?
+  breeding             String?
+  feeding              String?
+  documents            String?
+  location             String?
+  delivery             String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@unique([productId, locale])
+  @@index([locale])
+}

@@ -2,15 +2,14 @@ import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 
-import { FarmSection } from "@/components/farm-section";
+import { ContactSection } from "@/components/contact-section";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
-import { HeroSection } from "@/components/hero-section";
-import { ProductsSection } from "@/components/products-section";
 import { routing } from "@/i18n/routing";
-import { getApiCategories } from "@/lib/api-catalog";
 
-export default async function Home({ params }: PageProps<"/[locale]">) {
+export default async function ContactPage({
+  params,
+}: PageProps<"/[locale]/contact">) {
   const { locale } = await params;
 
   if (!hasLocale(routing.locales, locale)) {
@@ -18,14 +17,11 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
   }
 
   setRequestLocale(locale);
-  const categories = await getApiCategories(locale);
 
   return (
     <main className="min-h-screen">
       <Header />
-      <HeroSection />
-      <ProductsSection categories={categories} />
-      <FarmSection />
+      <ContactSection />
       <Footer />
     </main>
   );

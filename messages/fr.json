@@ -1,6 +1,116 @@
 {
   "Metadata": {
-    "title": "Hello world",
-    "description": "Hello world"
+    "title": "Ferme El Baraka",
+    "description": "Produits naturels de la ferme en Tunisie."
+  },
+  "Header": {
+    "country": "Tunisie",
+    "products": "Produits",
+    "story": "Notre histoire",
+    "farm": "La ferme",
+    "contact": "Contact",
+    "shopNow": "Commander",
+    "switchLocale": "Passer en arabe"
+  },
+  "Hero": {
+    "eyebrow": "Depuis le coeur de la Tunisie",
+    "titleLine1": "Produits fermiers",
+    "titleLine2": "purs et naturels",
+    "description": "Trois generations de tradition pour cultiver et elever avec soin le lait, la viande, le miel, les fruits et les legumes des terres fertiles de Kairouan.",
+    "primaryAction": "Voir les produits",
+    "secondaryAction": "Notre histoire",
+    "imageAlt": "Champ agricole au coucher du soleil"
+  },
+  "Products": {
+    "eyebrow": "Ce que nous proposons",
+    "title": "Nos produits fermiers",
+    "description": "Parcourez la ferme par categorie : vaches, agneaux, chevres, volailles, oeufs, fruits, legumes et miel.",
+    "categoryLabel": "Categorie",
+    "viewProducts": "Voir les produits",
+    "categories": {
+      "cows": {
+        "name": "Vaches",
+        "description": "Vaches laitieres et bovins destines a la viande disponibles a la ferme."
+      },
+      "dairy-cows": {
+        "name": "Vaches pour lait",
+        "description": "Vaches destinees a la production de lait, disponibles a la ferme."
+      },
+      "meat-cows": {
+        "name": "Vaches pour viande",
+        "description": "Bovins eleves pour des commandes de viande de qualite."
+      },
+      "lamb": {
+        "name": "Agneaux",
+        "description": "Agneaux eleves traditionnellement pour des commandes de viande de qualite."
+      },
+      "goats": {
+        "name": "Chevres",
+        "description": "Chevres robustes elevees pour une viande maigre et savoureuse."
+      },
+      "chickens": {
+        "name": "Poulets",
+        "description": "Poulets de ferme eleves avec des soins simples et quotidiens."
+      },
+      "eggs": {
+        "name": "Oeufs",
+        "description": "Oeufs frais recoltes aupres des poules de la ferme."
+      },
+      "vegetables": {
+        "name": "Legumes",
+        "description": "Legumes de saison recoltes lorsqu'ils sont prets."
+      },
+      "dates": {
+        "name": "Dattes",
+        "description": "Dattes naturellement sucrees pour la table familiale et les cadeaux."
+      },
+      "figs": {
+        "name": "Figues",
+        "description": "Figues de saison cueillies a pleine maturite."
+      },
+      "oranges": {
+        "name": "Oranges",
+        "description": "Oranges juteuses pour la consommation fraiche et les jus."
+      },
+      "honey": {
+        "name": "Miel",
+        "description": "Miel pur de la ferme au caractere floral naturel."
+      }
+    }
+  },
+  "ProductCategory": {
+    "eyebrow": "Categorie de produits",
+    "empty": "Les produits de cette categorie seront ajoutes bientot.",
+    "purpose": {
+      "milk": "Vache laitiere",
+      "meat": "Vache de viande"
+    }
+  },
+  "ProductDetail": {
+    "labels": {
+      "purpose": "Utilisation",
+      "breed": "Race",
+      "sex": "Sexe",
+      "age": "Age",
+      "price": "Prix",
+      "weight": "Poids",
+      "status": "Statut"
+    },
+    "purpose": {
+      "milk": "Vache laitiere",
+      "meat": "Vache de viande"
+    },
+    "fallback": "Disponible sur demande",
+    "buyNow": "Acheter",
+    "contactFarmer": "Contacter le fermier",
+    "sections": {
+      "overview": "Apercu",
+      "health": "Sante et vaccination",
+      "production": "Production",
+      "breeding": "Reproduction",
+      "feeding": "Alimentation",
+      "documents": "Documents",
+      "location": "Localisation et livraison"
+    }
   }
 }

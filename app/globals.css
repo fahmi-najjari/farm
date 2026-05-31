@@ -123,4 +123,21 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  [dir="rtl"] body {
+    font-family: var(--font-arabic), sans-serif;
+    line-height: 1.7;
+  }
+
+  [dir="rtl"] .font-sans {
+    font-family: var(--font-arabic), sans-serif;
+  }
+
+  [dir="rtl"] .uppercase {
+    text-transform: none;
+  }
+
+  [dir="rtl"] [class*="tracking-"] {
+    letter-spacing: 0;
+  }
 }

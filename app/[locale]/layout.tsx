@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
-import { Geist_Mono, Playfair_Display } from "next/font/google";
+import { Geist_Mono, Playfair_Display, Tajawal } from "next/font/google";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 
-import { Footer } from "./_components/footer";
-import { Header } from "./_components/header";
 import { routing, type Locale } from "@/i18n/routing";
 import "../globals.css";
 
@@ -17,6 +15,12 @@ const playfair = Playfair_Display({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const tajawal = Tajawal({
+  variable: "--font-arabic",
+  subsets: ["arabic"],
+  weight: ["400", "500", "700"],
 });
 
 const localeDirections: Record<Locale, "ltr" | "rtl"> = {
@@ -56,14 +60,10 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       dir={localeDirections[locale]}
-      className={`${playfair.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${playfair.variable} ${geistMono.variable} ${tajawal.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
-        <NextIntlClientProvider>
-          <Header locale={locale} />
-          {children}
-          <Footer />
-        </NextIntlClientProvider>
+        <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>
   );
