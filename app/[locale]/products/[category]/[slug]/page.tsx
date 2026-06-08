@@ -53,6 +53,9 @@ export default async function ProductDetailPage({
   const productTranslation = getTranslation(product);
   const t = await getTranslations({ locale, namespace: "ProductDetail" });
   const fallback = t("fallback");
+  const isAnimal = category.kind === "ANIMAL";
+  const isProduce = category.kind === "PRODUCE";
+  const isPackaged = category.kind === "PACKAGED";
   const displayPurpose = toDisplayPurpose(product.purpose);
   const productPurpose =
     displayPurpose === "Milk"
@@ -60,6 +63,42 @@ export default async function ProductDetailPage({
       : displayPurpose === "Meat"
         ? t("purpose.meat")
         : fallback;
+  const detailRows = isAnimal
+    ? [
+        { label: t("labels.purpose"), value: productPurpose },
+        { label: t("labels.breed"), value: product.breed ?? fallback },
+        { label: t("labels.sex"), value: product.sex ?? fallback },
+        {
+          label: t("labels.age"),
+          value: getAgeFromBirthDate(product.birthDate, locale) ?? fallback,
+        },
+        { label: t("labels.price"), value: product.price ?? fallback },
+        { label: t("labels.weight"), value: product.weight ?? fallback },
+        { label: t("labels.status"), value: product.status ?? fallback },
+      ]
+    : [
+        { label: t("labels.price"), value: product.price ?? fallback },
+        { label: t("labels.weight"), value: product.weight ?? fallback },
+        { label: locale === "ar" ? "الكمية" : "Quantite", value: product.quantity ?? fallback },
+        { label: locale === "ar" ? "الوحدة" : "Unite", value: product.unit ?? fallback },
+        ...(isProduce
+          ? [
+              {
+                label: locale === "ar" ? "تاريخ الجني" : "Date de recolte",
+                value: formatDate(product.harvestDate, locale) ?? fallback,
+              },
+            ]
+          : []),
+        ...(isPackaged
+          ? [
+              {
+                label: locale === "ar" ? "حجم العبوة" : "Format",
+                value: product.packageSize ?? fallback,
+              },
+            ]
+          : []),
+        { label: t("labels.status"), value: product.status ?? fallback },
+      ];
 
   return (
     <main className="min-h-screen">
@@ -91,62 +130,16 @@ export default async function ProductDetailPage({
                   : (productTranslation?.name ?? product.slug)}
               </h1>
               <dl className="mt-8 space-y-4 font-sans">
-                <div>
-                  <dt className="text-sm text-muted-foreground">
-                    {t("labels.purpose")}
-                  </dt>
-                  <dd className="text-lg font-medium text-foreground">
-                    {productPurpose}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-sm text-muted-foreground">
-                    {t("labels.breed")}
-                  </dt>
-                  <dd className="text-lg font-medium text-foreground">
-                    {product.breed ?? fallback}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-sm text-muted-foreground">
-                    {t("labels.sex")}
-                  </dt>
-                  <dd className="text-lg font-medium text-foreground">
-                    {product.sex ?? fallback}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-sm text-muted-foreground">
-                    {t("labels.age")}
-                  </dt>
-                  <dd className="text-lg font-medium text-foreground">
-                    {getAgeFromBirthDate(product.birthDate, locale) ?? fallback}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-sm text-muted-foreground">
-                    {t("labels.price")}
-                  </dt>
-                  <dd className="text-lg font-medium text-foreground">
-                    {product.price}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-sm text-muted-foreground">
-                    {t("labels.weight")}
-                  </dt>
-                  <dd className="text-lg font-medium text-foreground">
-                    {product.weight ?? fallback}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-sm text-muted-foreground">
-                    {t("labels.status")}
-                  </dt>
-                  <dd className="text-lg font-medium text-foreground">
-                    {product.status ?? fallback}
-                  </dd>
-                </div>
+                {detailRows.map((row) => (
+                  <div key={row.label}>
+                    <dt className="text-sm text-muted-foreground">
+                      {row.label}
+                    </dt>
+                    <dd className="text-lg font-medium text-foreground">
+                      {row.value}
+                    </dd>
+                  </div>
+                ))}
               </dl>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -185,16 +178,22 @@ export default async function ProductDetailPage({
               id="health"
               title={t("sections.health")}
               fallback={fallback}
-              value={productTranslation?.healthAndVaccination ?? undefined}
+              value={
+                isAnimal
+                  ? (productTranslation?.healthAndVaccination ?? undefined)
+                  : (productTranslation?.storageNotes ?? undefined)
+              }
             />
             <ProductInfoSection
               id="production"
               title={t("sections.production")}
               fallback={fallback}
               value={
-                displayPurpose === "Milk"
-                  ? (productTranslation?.milkProduction ?? undefined)
-                  : (productTranslation?.meatDetails ?? undefined)
+                isPackaged
+                  ? (productTranslation?.ingredients ?? undefined)
+                  : displayPurpose === "Milk"
+                    ? (productTranslation?.milkProduction ?? undefined)
+                    : (productTranslation?.meatDetails ?? undefined)
               }
             />
             <ProductInfoSection
@@ -229,6 +228,20 @@ export default async function ProductDetailPage({
       <Footer />
     </main>
   );
+}
+
+function formatDate(value: string | null | undefined, locale: string) {
+  if (!value) {
+    return undefined;
+  }
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return undefined;
+  }
+
+  return new Intl.DateTimeFormat(locale === "ar" ? "ar" : "fr-FR").format(date);
 }
 
 function ProductInfoSection({
