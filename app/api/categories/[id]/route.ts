@@ -1,4 +1,7 @@
+import { CategoryKind } from "@prisma/client";
+
 import { prisma } from "@/lib/prisma";
+import { requireAdminApi } from "@/lib/admin-auth";
 import { jsonError, readJson, stringValue } from "@/lib/api-response";
 
 export const dynamic = "force-dynamic";
@@ -33,6 +36,12 @@ export async function PATCH(
   request: Request,
   context: RouteContext<"/api/categories/[id]">,
 ) {
+  const authError = await requireAdminApi();
+
+  if (authError) {
+    return authError;
+  }
+
   const { id } = await context.params;
   const body = await readJson(request);
 
@@ -44,6 +53,7 @@ export async function PATCH(
     where: { id },
     data: {
       slug: stringValue(body.slug),
+      kind: getKind(body.kind),
       imageUrl: stringValue(body.imageUrl),
       sortOrder: numberValue(body.sortOrder),
     },
@@ -51,6 +61,21 @@ export async function PATCH(
   });
 
   return Response.json({ category });
+}
+
+function getKind(value: unknown) {
+  const kind = stringValue(value)?.toUpperCase();
+
+  if (
+    kind === "ANIMAL" ||
+    kind === "PRODUCE" ||
+    kind === "PACKAGED" ||
+    kind === "GENERAL"
+  ) {
+    return CategoryKind[kind];
+  }
+
+  return undefined;
 }
 
 function numberValue(value: unknown) {
@@ -61,6 +86,12 @@ export async function DELETE(
   _request: Request,
   context: RouteContext<"/api/categories/[id]">,
 ) {
+  const authError = await requireAdminApi();
+
+  if (authError) {
+    return authError;
+  }
+
   const { id } = await context.params;
 
   await prisma.productCategory.delete({

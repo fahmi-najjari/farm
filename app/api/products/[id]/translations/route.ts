@@ -1,6 +1,7 @@
 import { Locale } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
+import { requireAdminApi } from "@/lib/admin-auth";
 import { jsonError, readJson, stringValue } from "@/lib/api-response";
 
 export const dynamic = "force-dynamic";
@@ -9,6 +10,12 @@ export async function PUT(
   request: Request,
   context: RouteContext<"/api/products/[id]/translations">,
 ) {
+  const authError = await requireAdminApi();
+
+  if (authError) {
+    return authError;
+  }
+
   const { id } = await context.params;
   const body = await readJson(request);
 
@@ -41,6 +48,8 @@ export async function PUT(
       meatDetails: stringValue(body.meatDetails),
       breeding: stringValue(body.breeding),
       feeding: stringValue(body.feeding),
+      storageNotes: stringValue(body.storageNotes),
+      ingredients: stringValue(body.ingredients),
       documents: stringValue(body.documents),
       location: stringValue(body.location),
       delivery: stringValue(body.delivery),
@@ -54,6 +63,8 @@ export async function PUT(
       meatDetails: stringValue(body.meatDetails),
       breeding: stringValue(body.breeding),
       feeding: stringValue(body.feeding),
+      storageNotes: stringValue(body.storageNotes),
+      ingredients: stringValue(body.ingredients),
       documents: stringValue(body.documents),
       location: stringValue(body.location),
       delivery: stringValue(body.delivery),

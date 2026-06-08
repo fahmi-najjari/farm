@@ -11,6 +11,7 @@ const prisma = new PrismaClient({ adapter });
 const categories = [
   {
     slug: "dairy-cows",
+    kind: "ANIMAL",
     sortOrder: 10,
     imageUrl:
       "https://images.unsplash.com/photo-1527153857715-3908f2bae5e8?w=800&q=80",
@@ -28,6 +29,7 @@ const categories = [
   },
   {
     slug: "meat-cows",
+    kind: "ANIMAL",
     sortOrder: 20,
     imageUrl:
       "https://images.unsplash.com/photo-1551028150-64b9f398f678?w=800&q=80",
@@ -44,6 +46,7 @@ const categories = [
   },
   {
     slug: "lamb",
+    kind: "ANIMAL",
     sortOrder: 30,
     imageUrl:
       "https://images.unsplash.com/photo-1484557985045-edf25e08da73?w=800&q=80",
@@ -61,6 +64,7 @@ const categories = [
   },
   {
     slug: "goats",
+    kind: "ANIMAL",
     sortOrder: 40,
     imageUrl:
       "https://images.unsplash.com/photo-1524024973431-2ad916746881?w=800&q=80",
@@ -77,6 +81,7 @@ const categories = [
   },
   {
     slug: "chickens",
+    kind: "ANIMAL",
     sortOrder: 50,
     imageUrl:
       "https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=800&q=80",
@@ -93,6 +98,7 @@ const categories = [
   },
   {
     slug: "eggs",
+    kind: "PRODUCE",
     sortOrder: 60,
     imageUrl:
       "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=800&q=80",
@@ -109,6 +115,7 @@ const categories = [
   },
   {
     slug: "vegetables",
+    kind: "PRODUCE",
     sortOrder: 70,
     imageUrl:
       "https://images.unsplash.com/photo-1566385101042-1a0aa0c1268c?w=800&q=80",
@@ -125,6 +132,7 @@ const categories = [
   },
   {
     slug: "dates",
+    kind: "PRODUCE",
     sortOrder: 80,
     imageUrl:
       "https://images.unsplash.com/photo-1610300022917-7fac47632766?w=800&q=80",
@@ -141,6 +149,7 @@ const categories = [
   },
   {
     slug: "figs",
+    kind: "PRODUCE",
     sortOrder: 90,
     imageUrl:
       "https://images.unsplash.com/photo-1601379760883-1bb497c558dd?w=800&q=80",
@@ -157,6 +166,7 @@ const categories = [
   },
   {
     slug: "oranges",
+    kind: "PRODUCE",
     sortOrder: 100,
     imageUrl:
       "https://images.unsplash.com/photo-1582979512210-99b6a53386f9?w=800&q=80",
@@ -173,6 +183,7 @@ const categories = [
   },
   {
     slug: "honey",
+    kind: "PACKAGED",
     sortOrder: 110,
     imageUrl:
       "https://images.unsplash.com/photo-1568657704598-602700bd9694?w=800&q=80",
@@ -301,6 +312,7 @@ async function main() {
       where: { slug: category.slug },
       create: {
         slug: category.slug,
+        kind: category.kind,
         imageUrl: category.imageUrl,
         sortOrder: category.sortOrder,
         translations: {
@@ -314,6 +326,7 @@ async function main() {
       },
       update: {
         imageUrl: category.imageUrl,
+        kind: category.kind,
         sortOrder: category.sortOrder,
       },
     });

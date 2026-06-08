@@ -1,6 +1,7 @@
 import { ProductPurpose, ProductStatus } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
+import { requireAdminApi } from "@/lib/admin-auth";
 import { jsonError, readJson, stringValue } from "@/lib/api-response";
 
 export const dynamic = "force-dynamic";
@@ -35,6 +36,12 @@ export async function PATCH(
   request: Request,
   context: RouteContext<"/api/products/[id]">,
 ) {
+  const authError = await requireAdminApi();
+
+  if (authError) {
+    return authError;
+  }
+
   const { id } = await context.params;
   const body = await readJson(request);
 
@@ -54,6 +61,10 @@ export async function PATCH(
       birthDate: dateValue(body.birthDate),
       price: stringValue(body.price),
       weight: stringValue(body.weight),
+      unit: stringValue(body.unit),
+      quantity: stringValue(body.quantity),
+      harvestDate: dateValue(body.harvestDate),
+      packageSize: stringValue(body.packageSize),
       imageUrl: stringValue(body.imageUrl),
       status: getStatus(body.status),
     },
@@ -79,6 +90,12 @@ export async function DELETE(
   _request: Request,
   context: RouteContext<"/api/products/[id]">,
 ) {
+  const authError = await requireAdminApi();
+
+  if (authError) {
+    return authError;
+  }
+
   const { id } = await context.params;
 
   await prisma.product.delete({

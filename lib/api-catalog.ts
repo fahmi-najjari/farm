@@ -12,6 +12,8 @@ type Translation = {
   meatDetails?: string | null;
   breeding?: string | null;
   feeding?: string | null;
+  storageNotes?: string | null;
+  ingredients?: string | null;
   documents?: string | null;
   location?: string | null;
   delivery?: string | null;
@@ -20,6 +22,7 @@ type Translation = {
 export type ApiCategory = {
   id: string;
   slug: string;
+  kind: "ANIMAL" | "PRODUCE" | "PACKAGED" | "GENERAL";
   imageUrl?: string | null;
   translations: Translation[];
 };
@@ -34,6 +37,10 @@ export type ApiProduct = {
   birthDate?: string | null;
   price?: string | null;
   weight?: string | null;
+  unit?: string | null;
+  quantity?: string | null;
+  harvestDate?: string | null;
+  packageSize?: string | null;
   imageUrl?: string | null;
   status: string;
   category: ApiCategory;

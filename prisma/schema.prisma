@@ -29,6 +29,13 @@ enum ProductPurpose {
   GENERAL
 }
 
+enum CategoryKind {
+  ANIMAL
+  PRODUCE
+  PACKAGED
+  GENERAL
+}
+
 model User {
   id        String   @id @default(cuid())
   name      String?
@@ -41,6 +48,7 @@ model User {
 model ProductCategory {
   id           String                       @id @default(cuid())
   slug         String                       @unique
+  kind         CategoryKind                 @default(GENERAL)
   imageUrl     String?
   sortOrder    Int                          @default(0)
   products     Product[]
@@ -75,6 +83,10 @@ model Product {
   birthDate    DateTime?
   price        String?
   weight       String?
+  unit         String?
+  quantity     String?
+  harvestDate  DateTime?
+  packageSize  String?
   imageUrl     String?
   status       ProductStatus      @default(AVAILABLE)
   translations ProductTranslation[]
@@ -84,6 +96,7 @@ model Product {
   @@index([categoryId])
   @@index([status])
   @@index([purpose])
+  @@index([harvestDate])
 }
 
 model ProductTranslation {
@@ -99,6 +112,8 @@ model ProductTranslation {
   meatDetails          String?
   breeding             String?
   feeding              String?
+  storageNotes         String?
+  ingredients          String?
   documents            String?
   location             String?
   delivery             String?

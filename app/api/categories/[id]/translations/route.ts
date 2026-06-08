@@ -1,6 +1,7 @@
 import { Locale } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
+import { requireAdminApi } from "@/lib/admin-auth";
 import { jsonError, readJson, stringValue } from "@/lib/api-response";
 
 export const dynamic = "force-dynamic";
@@ -9,6 +10,12 @@ export async function PUT(
   request: Request,
   context: RouteContext<"/api/categories/[id]/translations">,
 ) {
+  const authError = await requireAdminApi();
+
+  if (authError) {
+    return authError;
+  }
+
   const { id } = await context.params;
   const body = await readJson(request);
 

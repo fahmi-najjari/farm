@@ -1,6 +1,7 @@
 import { Locale, ProductPurpose, ProductStatus } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
+import { requireAdminApi } from "@/lib/admin-auth";
 import { jsonError, readJson, stringValue } from "@/lib/api-response";
 
 export const dynamic = "force-dynamic";
@@ -60,6 +61,12 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const authError = await requireAdminApi();
+
+  if (authError) {
+    return authError;
+  }
+
   const body = await readJson(request);
 
   if (!body) {
@@ -84,6 +91,10 @@ export async function POST(request: Request) {
       birthDate: dateValue(body.birthDate),
       price: stringValue(body.price),
       weight: stringValue(body.weight),
+      unit: stringValue(body.unit),
+      quantity: stringValue(body.quantity),
+      harvestDate: dateValue(body.harvestDate),
+      packageSize: stringValue(body.packageSize),
       imageUrl: stringValue(body.imageUrl),
       status: getStatus(body.status),
       translations: {
@@ -169,6 +180,8 @@ function getProductTranslations(body: Record<string, unknown>) {
         meatDetails: stringValue(value.meatDetails),
         breeding: stringValue(value.breeding),
         feeding: stringValue(value.feeding),
+        storageNotes: stringValue(value.storageNotes),
+        ingredients: stringValue(value.ingredients),
         documents: stringValue(value.documents),
         location: stringValue(value.location),
         delivery: stringValue(value.delivery),
